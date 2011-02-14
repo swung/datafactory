@@ -11,7 +11,8 @@ import org.datafactory.values.ContentDataValues;
 import org.datafactory.values.impl.RBAddressDataValues;
 import org.datafactory.values.impl.RBContentDataValues;
 
-public class DataFactory {
+public class DataFactory
+{
 
 	private static Random random = new Random(93285);
 
@@ -21,15 +22,18 @@ public class DataFactory {
 	private AddressDataValues addressDataValues;
 	private ContentDataValues contentDataValues;
 
-	public DataFactory(Locale locale) {
+	public DataFactory(Locale locale)
+	{
 		this.locale = locale;
 	}
 
-	public DataFactory(String locale) {
+	public DataFactory(String locale)
+	{
 		this.locale = new Locale(locale);
 	}
 
-	public DataFactory() {
+	public DataFactory()
+	{
 		this.locale = Locale.getDefault();
 	}
 
@@ -42,7 +46,8 @@ public class DataFactory {
 	 *            List of items to choose from
 	 * @return Item from the list
 	 */
-	public <T> T getItem(List<T> items) {
+	public <T> T getItem(List<T> items)
+	{
 		return getItem(items, 100, null);
 	}
 
@@ -60,7 +65,8 @@ public class DataFactory {
 	 *            the list
 	 * @return Item from the list or null if the probability test fails.
 	 */
-	public <T> T getItem(List<T> items, int probability) {
+	public <T> T getItem(List<T> items, int probability)
+	{
 		return getItem(items, probability, null);
 	}
 
@@ -80,7 +86,8 @@ public class DataFactory {
 	 *            value to return if the probability test fails
 	 * @return Item from the list or the default value
 	 */
-	public <T> T getItem(List<T> items, int probability, T defaultItem) {
+	public <T> T getItem(List<T> items, int probability, T defaultItem)
+	{
 		if (items == null) {
 			throw new IllegalArgumentException("Item list cannot be null");
 		}
@@ -88,8 +95,7 @@ public class DataFactory {
 			throw new IllegalArgumentException("Item list cannot be empty");
 		}
 
-		return chance(probability) ? items.get(random.nextInt(items.size()))
-				: defaultItem;
+		return chance(probability) ? items.get(random.nextInt(items.size())) : defaultItem;
 	}
 
 	/**
@@ -101,7 +107,8 @@ public class DataFactory {
 	 *            Array of items to choose from
 	 * @return Item from the array
 	 */
-	public <T> T getItem(T[] items) {
+	public <T> T getItem(T[] items)
+	{
 		return getItem(items, 100, null);
 	}
 
@@ -119,7 +126,8 @@ public class DataFactory {
 	 *            the array
 	 * @return Item from the array or the default value
 	 */
-	public <T> T getItem(T[] items, int probability) {
+	public <T> T getItem(T[] items, int probability)
+	{
 		return getItem(items, probability, null);
 	}
 
@@ -139,15 +147,15 @@ public class DataFactory {
 	 *            value to return if the probability test fails
 	 * @return Item from the array or the default value
 	 */
-	public <T> T getItem(T[] items, int probability, T defaultItem) {
+	public <T> T getItem(T[] items, int probability, T defaultItem)
+	{
 		if (items == null) {
 			throw new IllegalArgumentException("Item array cannot be null");
 		}
 		if (items.length == 0) {
 			throw new IllegalArgumentException("Item array cannot be empty");
 		}
-		return chance(probability) ? items[random.nextInt(items.length)]
-				: defaultItem;
+		return chance(probability) ? items[random.nextInt(items.length)] : defaultItem;
 	}
 
 	/**
@@ -164,7 +172,8 @@ public class DataFactory {
 	 *            % chance of returning true
 	 * @return
 	 */
-	public boolean chance(int chance) {
+	public boolean chance(int chance)
+	{
 		return random.nextInt(100) < chance;
 	}
 
@@ -176,64 +185,74 @@ public class DataFactory {
 	 * @param seed
 	 *            Seed value to use to generate random numbers
 	 */
-	public void randomize(int seed) {
+	public void randomize(int seed)
+	{
 		random = new Random(seed);
 	}
 
 	// address data
-	private void initAddressDataValues() {
+	private void initAddressDataValues()
+	{
 		if (addressDataValues == null) {
 			addressDataValues = new RBAddressDataValues(locale);
 		}
 	}
 
-	public AddressDataValues getAddressDataValues() {
+	public AddressDataValues getAddressDataValues()
+	{
 		initAddressDataValues();
 		return addressDataValues;
 	}
 
-	public String getStreetName() {
+	public String getStreetName()
+	{
 		return getItem(getAddressDataValues().getStreetNames());
 	}
 
-	public String getStreetSuffix() {
+	public String getStreetSuffix()
+	{
 		return getItem(getAddressDataValues().getAddressSuffixes());
 	}
 
-	public String getCity() {
+	public String getCity()
+	{
 		return getItem(getAddressDataValues().getCities());
 	}
 
 	// content data
-	public String getRandomUnicode() {
+	public String getRandomUnicode()
+	{
 		byte[] str = new byte[2];
-		int chr = random.nextInt(0xD700) + 0xFF;
+		int chr = random.nextInt(0x51A5) + 0x4E00;
 		str[1] = (byte) ((chr & 0xFF00) >> 8);
 		str[0] = (byte) (chr & 0xFF);
 		try {
-			return new String(str, "UTF-16");
+			return new String(str, "UTF-16LE");
 		} catch (UnsupportedEncodingException e) {
 			return null;
 		}
 	}
 
-	private void initContentDataValues() {
+	private void initContentDataValues()
+	{
 		if (contentDataValues == null) {
 			contentDataValues = new RBContentDataValues(locale);
 		}
 	}
 
-	public ContentDataValues getContentDataValues() {
+	public ContentDataValues getContentDataValues()
+	{
 		initContentDataValues();
 		return contentDataValues;
 	}
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		DataFactory df = new DataFactory(new Locale("zh", "CN"));
-		for (int i = 0; i < 10; i++) {
-			System.out.println(df.getCity() + df.getStreetSuffix()
-					+ df.getStreetName());
-			System.out.println(df.getRandomUnicode());
+		for (int i = 0; i < 50; i++) {
+			// System.out.println(df.getCity() + df.getStreetSuffix()
+			// + df.getStreetName());
+			System.out.print(df.getRandomUnicode());
 		}
 	}
 }
