@@ -1,6 +1,8 @@
 package org.datafactory;
 
 import java.io.UnsupportedEncodingException;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -181,7 +183,6 @@ public class DataFactory {
 	}
 
 	// address data
-	
 
 	public AddressDataValues getAddressDataValues() {
 		initAddressDataValues();
@@ -277,19 +278,66 @@ public class DataFactory {
 		return contentDataValues;
 	}
 
+	// date data
+	/**
+	 * Builds a date from the year, month, day values passed in
+	 * 
+	 */
+	public Date getDate(int year, int month, int day) {
+		Calendar cal = Calendar.getInstance();
+		cal.clear();
+		cal.set(year, month - 1, day, 0, 0, 0);
+		return cal.getTime();
+	}
+
+	/**
+	 * Returns a random date which is in the range <code>baseData</code> +
+	 * <code>minDaysFromData</code> to <code>baseData</code> +
+	 * <code>maxDaysFromData</code>. This method does not alter the time
+	 * component and the time is set to the time value of the base date.
+	 * 
+	 */
+	public Date getDate(Date baseDate, int minDaysFromDate, int maxDaysFromDate) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(baseDate);
+		int diff = minDaysFromDate
+				+ (random.nextInt(maxDaysFromDate - minDaysFromDate));
+		cal.add(Calendar.DATE, diff);
+		return cal.getTime();
+	}
+
+	/**
+	 * Returns a random date between two dates. This method will alter the time
+	 * component of the dates
+	 * 
+	 */
+	public Date getDateBetween(Date minDate, Date maxDate) {
+		// this can break if seconds is an int
+		long seconds = (maxDate.getTime() - minDate.getTime()) / 1000;
+		seconds = (long) (random.nextDouble() * seconds);
+		Date result = new Date();
+		result.setTime(minDate.getTime() + (seconds * 1000));
+		return result;
+	}
+
+	public Date getBirthDate() {
+		Date base = new Date(0);
+		return getDate(base, -365 * 15, 365 * 15);
+	}
+
 	// private methods
 	private void initAddressDataValues() {
 		if (addressDataValues == null) {
 			addressDataValues = new RBAddressDataValues(locale);
 		}
 	}
-	
+
 	private void initContentDataValues() {
 		if (contentDataValues == null) {
 			contentDataValues = new RBContentDataValues(locale);
 		}
 	}
-	
+
 	private void validateMinMaxParams(int minLength, int maxLength) {
 		if (minLength < 0) {
 			throw new IllegalArgumentException(
@@ -316,6 +364,7 @@ public class DataFactory {
 			// + df.getStreetName());
 			System.out.println(df.getRandomChars(2, 50));
 			System.out.println(df.getRandomUnicodes(2, 50));
+			System.out.println(df.getBirthDate());
 		}
 	}
 }
