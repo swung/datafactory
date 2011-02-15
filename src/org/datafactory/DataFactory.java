@@ -205,6 +205,46 @@ public class DataFactory {
 	}
 
 	// content data
+	/**
+	 * @return a random character
+	 */
+	public char getRandomChar() {
+		return (char) (random.nextInt(26) + 'a');
+	}
+
+	/**
+	 * Return a string containing <code>length</code> random characters
+	 * 
+	 * @param length
+	 *            number of characters to use in the string
+	 * @return A string containing <code>length</code> random characters
+	 */
+	public String getRandomChars(int length) {
+		return getRandomChars(length, length);
+	}
+
+	/**
+	 * Return a string containing between <code>length</code> random characters
+	 * 
+	 * @param length
+	 *            number of characters to use in the string
+	 * @return A string containing <code>length</code> random characters
+	 */
+	public String getRandomChars(int minLength, int maxLength) {
+		validateMinMaxParams(minLength, maxLength);
+		StringBuilder sb = new StringBuilder(maxLength);
+
+		int length = minLength;
+		if (maxLength != minLength) {
+			length = length + random.nextInt(maxLength - minLength);
+		}
+		while (length > 0) {
+			sb.append(getRandomChar());
+			length--;
+		}
+		return sb.toString();
+	}
+
 	public String getRandomUnicode() {
 		byte[] str = new byte[2];
 		int chr = random.nextInt(0x51A5) + 0x4E00;
@@ -272,7 +312,8 @@ public class DataFactory {
 		for (int i = 0; i < 50; i++) {
 			// System.out.println(df.getCity() + df.getStreetSuffix()
 			// + df.getStreetName());
-			System.out.println(df.getRandomUnicodes(2,50));
+			System.out.println(df.getRandomChars(2, 50));
+			System.out.println(df.getRandomUnicodes(2, 50));
 		}
 	}
 }
