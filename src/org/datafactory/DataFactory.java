@@ -181,11 +181,7 @@ public class DataFactory {
 	}
 
 	// address data
-	private void initAddressDataValues() {
-		if (addressDataValues == null) {
-			addressDataValues = new RBAddressDataValues(locale);
-		}
-	}
+	
 
 	public AddressDataValues getAddressDataValues() {
 		initAddressDataValues();
@@ -276,18 +272,24 @@ public class DataFactory {
 		return sb.toString();
 	}
 
-	private void initContentDataValues() {
-		if (contentDataValues == null) {
-			contentDataValues = new RBContentDataValues(locale);
-		}
-	}
-
 	public ContentDataValues getContentDataValues() {
 		initContentDataValues();
 		return contentDataValues;
 	}
 
 	// private methods
+	private void initAddressDataValues() {
+		if (addressDataValues == null) {
+			addressDataValues = new RBAddressDataValues(locale);
+		}
+	}
+	
+	private void initContentDataValues() {
+		if (contentDataValues == null) {
+			contentDataValues = new RBContentDataValues(locale);
+		}
+	}
+	
 	private void validateMinMaxParams(int minLength, int maxLength) {
 		if (minLength < 0) {
 			throw new IllegalArgumentException(
