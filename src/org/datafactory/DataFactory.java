@@ -15,7 +15,7 @@ import org.datafactory.values.impl.RBContentDataValues;
 
 public class DataFactory {
 
-	private static Random random = new Random(93285);
+	private static Random random = new Random();
 
 	private Locale locale;
 
