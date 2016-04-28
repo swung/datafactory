@@ -14,7 +14,10 @@ import org.datafactory.values.impl.RBAddressDataValues;
 import org.datafactory.values.impl.RBContentDataValues;
 
 public class DataFactory {
-
+	/*
+		Default constructor of Random class will use System.nanoTime() as seed generator so
+		every other usage will generate different output
+	 */
 	private static Random random = new Random();
 
 	private Locale locale;
